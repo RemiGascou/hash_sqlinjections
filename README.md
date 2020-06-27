@@ -1,1 +1,6 @@
-# hash_sqlinjections
+# SQL injections with raw hashes values
+
+##
+
+## References
+ - 
