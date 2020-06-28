@@ -11,7 +11,7 @@
 *
 */
 
-unsigned char * md5(char * input_string, unsigned char * hash_value, unsigned int * hash_len){
+void md5(char * input_string, unsigned char * hash_value, unsigned int * hash_len){
     EVP_MD_CTX * md_ctx;
     md_ctx = EVP_MD_CTX_new();
     if (md_ctx == NULL) {
@@ -23,4 +23,5 @@ unsigned char * md5(char * input_string, unsigned char * hash_value, unsigned in
     } else {
         // MD_CTX failed
     }
+    free(md_ctx);
 }

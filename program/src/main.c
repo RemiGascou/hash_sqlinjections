@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <openssl/evp.h>
 
-#include "./includes/hashes/hashes_libssl_under_1.1.0.h"
+#include "./includes/hashes/hashes_libssl_above_1.1.0.h"
 
 #define _NUM_THREADS 4
 
@@ -48,8 +48,7 @@ void * report_value(char * random_input, unsigned char * hash_value, unsigned in
 
 void * thread_find_md5_sqli(void * vargp) {
     unsigned char hash_value[EVP_MAX_MD_SIZE];
-    unsigned int  hash_len;
-    int tab_index = 0;
+    unsigned int  hash_len = 0;
     int r, r1, r2, r3;
     char random_input[100];
     char * match;
@@ -61,7 +60,7 @@ void * thread_find_md5_sqli(void * vargp) {
         sprintf(random_input, "%d%d%d%d", r, r1, r2, r3);
 
         md5(random_input, hash_value, &hash_len);
-
+        
         // find || or any case of OR
         match = strstr(hash_value, "'||'");
         if (match == NULL) {
