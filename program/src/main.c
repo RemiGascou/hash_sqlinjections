@@ -9,6 +9,8 @@
 #include <unistd.h>
 #include <openssl/evp.h>
 
+#include "./includes/hashes/hashes_libssl_under_1.1.0.h"
+
 #define _NUM_THREADS 4
 
 pthread_mutex_t mutex_report_value;
@@ -44,33 +46,28 @@ void * report_value(char * random_input, unsigned char * hash_value, unsigned in
     pthread_mutex_unlock(&mutex_report_value);
 }
 
-void * thread_find_md5_sqli(void *vargp) {
-    EVP_MD_CTX mdctx;
+void * thread_find_md5_sqli(void * vargp) {
     unsigned char hash_value[EVP_MAX_MD_SIZE];
-    unsigned int hash_len;
+    unsigned int  hash_len;
     int tab_index = 0;
     int r, r1, r2, r3;
     char random_input[100];
     char * match;
 
     srand(time(NULL));
-    while(threads_running) {
+    while (threads_running) {
         // pick a random string made of digits
         r = rand(); r1 = rand(); r2 = rand(); r3 = rand();
         sprintf(random_input, "%d%d%d%d", r, r1, r2, r3);
 
-        // calculate md5
-        EVP_DigestInit(&mdctx, EVP_md5());
-        EVP_DigestUpdate(&mdctx, random_input, (size_t) strlen(random_input));
-        EVP_DigestFinal_ex(&mdctx, hash_value, &hash_len);
-        EVP_MD_CTX_cleanup(&mdctx);
+        md5(random_input, hash_value, &hash_len);
 
         // find || or any case of OR
         match = strstr(hash_value, "'||'");
-        if(match == NULL) {
+        if (match == NULL) {
             match = strcasestr(hash_value, "'or'");
         }
-        if(match != NULL && match[4] > '0' && match[4] <= '9') {
+        if (match != NULL && match[4] > '0' && match[4] <= '9') {
             report_value(random_input, hash_value, hash_len);
         }
     }
