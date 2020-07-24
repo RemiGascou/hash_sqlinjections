@@ -60,12 +60,13 @@ void * thread_find_md5_sqli(void * vargp) {
         sprintf(random_input, "%d%d%d%d", r, r1, r2, r3);
 
         md5(random_input, hash_value, &hash_len);
-        
+
         // find || or any case of OR
         match = strstr(hash_value, "'||'");
         if (match == NULL) {
             match = strcasestr(hash_value, "'or'");
         }
+
         if (match != NULL && match[4] > '0' && match[4] <= '9') {
             report_value(random_input, hash_value, hash_len);
         }

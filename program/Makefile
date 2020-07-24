@@ -1,7 +1,7 @@
 .PHONY: all compile configure
 
 CC := gcc
-CFLAGS := -lpthread -lcrypto -D_GNU_SOURCE
+CFLAGS := -g -lpthread -lcrypto -D_GNU_SOURCE
 
 DIR_SRC := ./src/
 DIR_BIN := ./bin/

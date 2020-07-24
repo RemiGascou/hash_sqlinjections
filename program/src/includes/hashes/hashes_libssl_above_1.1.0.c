@@ -14,7 +14,7 @@
 void md5(char * input_string, unsigned char * hash_value, unsigned int * hash_len){
     EVP_MD_CTX * md_ctx;
     md_ctx = EVP_MD_CTX_new();
-    if (md_ctx == NULL) {
+    if (md_ctx != NULL) {
         // Calculate MD5
         EVP_DigestInit(md_ctx, EVP_md5());
         EVP_DigestUpdate(md_ctx, input_string, (size_t) strlen(input_string));
@@ -23,5 +23,4 @@ void md5(char * input_string, unsigned char * hash_value, unsigned int * hash_le
     } else {
         // MD_CTX failed
     }
-    free(md_ctx);
 }
